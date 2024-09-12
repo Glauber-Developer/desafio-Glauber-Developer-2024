@@ -1,4 +1,5 @@
 import { RecintosZoo } from "./recintos-zoo.js";
+import { Recinto } from "./domain/entities/Recinto.js"
 
 describe('Recintos do Zoologico', () => {
 
@@ -39,3 +40,36 @@ describe('Recintos do Zoologico', () => {
 
 });
 
+describe('Testes de viabilidade de recintos para macacos', () => {
+    test('Recinto vazio não deve ser viável para apenas 1 macaco', () => {
+      const recintoVazio = new Recinto(1, 'savana', 10, []);
+      const macaco = { nome: 'MACACO', biomas: ['savana', 'floresta', 'savana e rio'], tamanho: 1 };
+  
+      const resultado = recintoVazio.isViavelPara(macaco, 1);
+      expect(resultado).toBe(false);
+    });
+  
+    test('Recinto vazio deve ser viável para 2 ou mais macacos', () => {
+      const recintoVazio = new Recinto(2, 'savana', 10, []);
+      const macaco = { nome: 'MACACO', biomas: ['savana', 'floresta', 'savana e rio'], tamanho: 1 };
+  
+      const resultado = recintoVazio.isViavelPara(macaco, 2);
+      expect(resultado).toBe(true);
+    });
+  
+    test('Recinto com outros animais não carnívoros deve ser viável para macacos', () => {
+      const recintoComAnimais = new Recinto(3, 'savana', 10, [{ nome: 'GAZELA', tamanho: 2 }]);
+      const macaco = { nome: 'MACACO', biomas: ['savana', 'floresta', 'savana e rio'], tamanho: 1 };
+  
+      const resultado = recintoComAnimais.isViavelPara(macaco, 2);
+      expect(resultado).toBe(true);
+    });
+  
+    test('Recinto com carnívoros não deve ser viável para macacos', () => {
+      const recintoComCarnivoro = new Recinto(4, 'savana', 10, [{ nome: 'LEAO', tamanho: 3 }]);
+      const macaco = { nome: 'MACACO', biomas: ['savana', 'floresta', 'savana e rio'], tamanho: 1 };
+  
+      const resultado = recintoComCarnivoro.isViavelPara(macaco, 2);
+      expect(resultado).toBe(false);
+    });
+  });
